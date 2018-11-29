@@ -5,10 +5,9 @@ CUR=$(pwd)
 
 while true; do
 	HOOK=$(echo -en "${RESPONSE:-$DEFAULT_RESPONSE}" \
-		| nc -l ${PORT:-9000} \
-		| awk 'f && !NF{exit} {f=1} f') 
+		| nc -l ${PORT:-9000}) 
 	
-	echo -e "Recieved HTTP Request:\n$HOOK"
+	echo -e "Recieved HTTP Request:\n$(echo $HOOK | awk 'f && !NF{exit} {f=1} f')"
 
 	if echo $HOOK | sed -n '
 		1s/^POST \/.+ HTTP\/1.1$//p
