@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 DEFAULT_RESPONSE="HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"
 CUR=$(pwd)
@@ -14,7 +14,7 @@ while true; do
 		4s/^GitHub-Hookshot\/\.+$//p
 	' | test; then
 		# Pull to the corresponding repository
-		DIR=$(echo $HOOK | head -n 1 | awk '$2' | sed -e 's/\.\.//')
+		DIR=$(echo $HOOK | head -n 1 | awk '{print $2}' | sed -e 's/\.\.//')
 		cd "$CUR$DIR" \
 			&& git pull \
 			&& echo "Successfully 'git pull'ed from $PWD" \
@@ -22,5 +22,5 @@ while true; do
 					the directory '$CUR$DIR'"
 	fi
 
-	echo -e "\n\n----------------------------------------------------\n\n"
+	echo -e "\n\n====================================================\n\n"
 done
