@@ -4,9 +4,10 @@ DEFAULT_RESPONSE="HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"
 CUR=$(pwd)
 
 while true; do
-	HOOK=$( echo -en ${RESPONSE:-$DEFAULT_RESPONSE} | nc -l ${PORT:-9000} )
+	HOOK=$( echo -en ${RESPONSE:-$DEFAULT_RESPONSE} | nc -l ${PORT:-9000} | awk
+	'f && !NF{exit} {f=1} f') 
 	
-	echo "Recieved HTTP Request:\n$HOOK"
+	echo -e "Recieved HTTP Request:\n$HOOK"
 
 	if echo $HOOK | sed -n '
 		1s/^POST \/.+ HTTP\/1.1$//p
@@ -17,8 +18,9 @@ while true; do
 		cd "$CUR$DIR" \
 			&& git pull \
 			&& echo "Successfully 'git pull'ed from $PWD" \
-			|| echo "An error occured while you attempted to 'git pull' from the directory '$DIR'"
+			|| echo "An error occured while you attempted to 'git pull' from
+					the directory '$CUR$DIR'"
 	fi
 
-	echo "\n\n----------------------------------------------------\n\n"
+	echo -e "\n\n----------------------------------------------------\n\n"
 done
