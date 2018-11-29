@@ -4,8 +4,9 @@ DEFAULT_RESPONSE="HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"
 CUR=$(pwd)
 
 while true; do
-	HOOK=$( echo -en ${RESPONSE:-$DEFAULT_RESPONSE} | nc -l ${PORT:-9000} | awk
-	'f && !NF{exit} {f=1} f') 
+	HOOK=$(echo -en "${RESPONSE:-$DEFAULT_RESPONSE}" \
+		| nc -l ${PORT:-9000} \
+		| awk 'f && !NF{exit} {f=1} f') 
 	
 	echo -e "Recieved HTTP Request:\n$HOOK"
 
@@ -14,7 +15,7 @@ while true; do
 		4s/^GitHub-Hookshot\/\.+$//p
 	' | test; then
 		# Pull to the corresponding repository
-		DIR=$(echo $HOOK | head -n 1 | awk '$2' | sed -e 's/\.\.//' )
+		DIR=$(echo $HOOK | head -n 1 | awk '$2' | sed -e 's/\.\.//')
 		cd "$CUR$DIR" \
 			&& git pull \
 			&& echo "Successfully 'git pull'ed from $PWD" \
