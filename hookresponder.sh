@@ -7,7 +7,7 @@ while true; do
 	HOOK=$(echo -en "${RESPONSE:-$DEFAULT_RESPONSE}" \
 		| nc -l ${PORT:-9000}) 
 	
-	echo -e "Recieved HTTP Request:\n$(echo "$HOOK" | sed -ne '1,/^$/p')"
+	echo -e "Recieved Request:\n\n$(echo "$HOOK" | sed -ne '1,/^$/p')"
 
 	if echo "$HOOK" | sed -n '
 		1s/^POST \/.+ HTTP\/1.1$//p
@@ -22,5 +22,5 @@ while true; do
 					the directory '$CUR$DIR'"
 	fi
 
-	echo -e "\n\n----------------------------------------------------\n\n"
+	echo -e "\n====================================================\n"
 done
